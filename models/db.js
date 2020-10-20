@@ -1,13 +1,16 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true }, (err) => {
+// TODO:  CHANGE THIS LATER
+mongoose.connect(
+  "mongodb+srv://6fqHWBUpkD2bvrxY:6fqHWBUpkD2bvrxY@development.oqgrq.mongodb.net/Development?retryWrites=true&w=majority",
+  { useUnifiedTopology: true, useNewUrlParser: true },
+  (err) => {
     if (!err) {
-        console.log('MongoDB connection succeeded.');
+      console.log("MongoDB connection succeeded.");
     } else {
-        console.log(
-            'Error in MongoDB connection : ' + JSON.stringify(err, undefined, 2)
-        );
+      console.log(
+        "Error in MongoDB connection : " + JSON.stringify(err, undefined, 2)
+      );
     }
-});
-
-
+  }
+);
