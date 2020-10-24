@@ -16,7 +16,7 @@ router.post('/ChangePassword', ctrl.ChangePassword);
 router.post('/register', ctrl.register);
 
 router.post("/customer/registerCustomer", customerCtrl.registerCustomer);
-router.post("/customer/details", customerCtrl.details);
+router.get("/customer/details", customerCtrl.details);
 router.post("/customer/updateCustomer", customerCtrl.updateCustomer);
 
 

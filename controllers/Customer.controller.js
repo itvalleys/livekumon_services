@@ -6,45 +6,36 @@ module.exports = {
         let customerRegData = new CustomerModel(req.body);
 
         customerRegData
-            .save((err) => {
-                res.status(400).send({
-                    status: "Bad Request",
-                    message: "Invalid Syntax",
-                    result: null,
-                });
-            })
+            .save()
             .then((val) => {
                 res.status(200).send({
                     status: "OK",
                     message: "Customer data inserted Successfully",
                     result: null,
                 });
+            })
+            .catch((err) => {
+                res.status(400).send({
+                    status: "Bad Request",
+                    message: "Invalid Syntax",
+                    result: null,
+                })
             });
 
     },
 
     async details(req, res) {
-        CustomerModel.findById(req.body.id)
-            .exec()
-            .then((doc) => {
-                if (doc != null) {
-                    res.status(200).send(doc.toJSON());
-                } else {
-                    res.sendStatus(400);
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-                res.sendStatus(500);
-            });
+        console.log(req.body)
+        CustomerModel.find({})
+            .select(" -customerId ")
+            .then(result => { res.status(200).json({ message: "Customer data retrieved", status: "OK", result }) })
+            .catch(err => { res.status(400).json({ message: "something went Wrong", err }); })
     },
 
     async updateCustomer(req, res) {
-
-        CustomerModel.findByIdAndUpdate(req.body.id, req.body, (err) => {
-            res.send(400);
-        })
-            .then((res) => {
+        console.log(req.body)
+        CustomerModel.update({ _id: req.body._id }, req.body)
+            .then((result) => {
                 res.status(200).send({
                     status: "OK",
                     message: "Customer data updated Successfully",
@@ -55,6 +46,5 @@ module.exports = {
                 res.sendStatus(500);
                 console.log(err);
             });
-
-    }
-}
+    },
+};

@@ -252,11 +252,19 @@ module.exports.getCorrespondingData = (req, res) => {
 }
 
 module.exports.updateCorrespondingData = (req, res) => {
-    console.log(req.params.name)
-    console.log(typeof req.params.name)
-    console.log(typeof classes)
-    // let vath = function(req.params.name);
-    // console.log(vath)
+    const vell = require(`../models/${req.params.name}.model`);
+    vell.updateOne({ id: req.body.id }, req.body)
+        .then((result) => {
+            res.status(200).json({
+                status: "OK",
+                message: `${req.params.name} updated successfully`,
+                result
+            });
+        })
+        .catch((err) => {
+            res.sendStatus(500);
+            console.log(err);
+        });
 
 }
 
