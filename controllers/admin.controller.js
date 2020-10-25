@@ -20,24 +20,26 @@ module.exports = {
             if (!user) {
                 return res.status(400).json({ message: "Invalid Credentials..you got no access" })
             }
-            // else if (!user.verifyPassword(req.body.password))
-            //     return res.status(400).json({ message: "Wrong Password .. No Access" })
             else {
-                var payload = {
-                    _id: user._id,
-                    userId: user.userId
+                console.log(user)
+                if (user.password === req.body.password) {
+                    var payload = {
+                        _id: user._id,
+                        userId: user.userId
+                    }
+                    var newToken = jwt.sign(payload, process.env.JWT_SECRET,
+                        {
+                            expiresIn: process.env.JWT_EXP,
+                        });
+                    var obj = {
+                        userId: user.userId,
+                        roleId: user.roleId,
+                        firstTimeLogin: user.firstTimeLogin,
+                        token: newToken,
+                    }
+                    return res.status(200).json({ message: "LoggedIn successfully", obj });
                 }
-                var newToken = jwt.sign(payload, process.env.JWT_SECRET,
-                    {
-                        expiresIn: process.env.JWT_EXP,
-                    });
-                var obj = {
-                    userId: user.userId,
-                    roleId: user.roleId,
-                    firstTimeLogin: user.firstTimeLogin,
-                    token: newToken,
-                }
-                return res.status(200).json({ message: "LoggedIn successfully", obj });
+                return res.status(200).json({ message: "Wrong Password !!" });
             }
         });
     },
@@ -69,68 +71,54 @@ module.exports.PasswordConfirm = (req, res, next) => {
 
 };
 
+
 // module.exports.ChangePassword = (req, res, next) => {
 //     // call for passport authentication
-//     passport.authenticate('local', (err, user, info) => {
-//         // error from passport middleware
 
-//         if (err) return res.status(400).json(err);
-//         // registered user
+//     console.log("inside else if of admion controller")
+//     if (req.body.newPassword == req.body.confirmPassword) {
+//         console.log("inside")
+//         bcrypt.genSalt(10, (err, salt) => {
+//             bcrypt.hash(req.body.confirmPassword, salt, (err, hash) => {
+//                 req.body.confirmPassword = hash
+//                 console.log(req.body.confirmPassword);
+//                 admin.updateOne({ userId: req.body.userId },
+//                     {
+//                         $set: { password: req.body.confirmPassword, firstTimeLogin: 'N' }
+//                     })
+//                     .then((result) => {
+//                         result = null;
+//                         res.status(200).send({ message: "customer registration succesfully done!", result });
+//                     })
+//                     .catch((err) => { res.status(400).send({ message: "Invalid userId", }); })
+//             });
+//         });
 
-//         else if (user) {
-//             console.log("inside else if of admion controller")
-//             if (req.body.newPassword = req.body.confirmPassword) {
-//                 bcrypt.genSalt(10, (err, salt) => {
-//                     bcrypt.hash(req.body.confirmPassword, salt, (err, hash) => {
-//                         req.body.confirmPassword = hash
-//                         console.log(req.body.confirmPassword);
-//                         admin.updateOne({ userId: req.body.userId },
-//                             {
-//                                 $set: { password: req.body.password, firstTimeLogin: 'N' }
-//                             })
-//                             .then((result) => {
-//                                 result = null;
-//                                 res.status(200).send({ message: "customer registration succesfully done!", result });
-//                             })
-//                             .catch((err) => { res.status(400).send({ message: "Invalid userId", }); })
-//                     });
-//                 });
-
-//             }
-//             else {
-//                 return res.status(200).send({ message: "password didnot match" })
-//             }
-
-//         }
-//         // unknown user or wrong password
-//         else return res.status(404).json(info);
-//     })(req, res);
+//     }
+//     else {
+//         console.log("outside")
+//         return res.status(200).send({ message: "password didnot match" })
+//     }
 // };
-
 
 module.exports.ChangePassword = (req, res, next) => {
     // call for passport authentication
 
     console.log("inside else if of admion controller")
-    if (req.body.newPassword = req.body.confirmPassword) {
-        bcrypt.genSalt(10, (err, salt) => {
-            bcrypt.hash(req.body.confirmPassword, salt, (err, hash) => {
-                req.body.confirmPassword = hash
-                console.log(req.body.confirmPassword);
-                admin.updateOne({ userId: req.body.userId },
-                    {
-                        $set: { password: req.body.confirmPassword, firstTimeLogin: 'N' }
-                    })
-                    .then((result) => {
-                        result = null;
-                        res.status(200).send({ message: "customer registration succesfully done!", result });
-                    })
-                    .catch((err) => { res.status(400).send({ message: "Invalid userId", }); })
-            });
-        });
-
+    if (req.body.newPassword == req.body.confirmPassword) {
+        console.log("inside")
+        admin.updateOne({ userId: req.body.userId },
+            {
+                $set: { password: req.body.confirmPassword, firstTimeLogin: 'N' }
+            })
+            .then((result) => {
+                result = null;
+                res.status(200).send({ message: "customer registration succesfully done!", result });
+            })
+            .catch((err) => { res.status(400).send({ message: "Invalid userId", }); })
     }
     else {
+        console.log("outside")
         return res.status(200).send({ message: "password didnot match" })
     }
 };
