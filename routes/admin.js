@@ -23,7 +23,7 @@ router.post("/customer/updateCustomer", customerCtrl.updateCustomer);
 //Posting all kinds of data
 router.post('/admin/addclass', ctrl.addClass)
 router.post('/admin/addtimezone', ctrl.addtimezone)
-// router.post('/admin/addclassstatus', ctrl.addclassstatus)
+router.post('/admin/addclassstatus', ctrl.addclassstatus)
 router.post("/admin/addcurrency", ctrl.addcurrency)
 router.post("/admin/addcountry", ctrl.addcountry)
 router.post("/admin/addstatus", ctrl.addStatus)
