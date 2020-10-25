@@ -8,6 +8,7 @@ const TimeZone = require('../models/timeZone.model');
 const Currency = require('../models/Currency.model');
 const Country = require('../models/Country.model');
 const Status = require('../models/Status.model')
+const ClassStatus = require('../models/ClassStatuses.model')
 
 module.exports = {
 
@@ -207,6 +208,17 @@ module.exports.addcountry = (req, res) => {
         .catch(err => { res.status('400').send({ message: "something went wrong !!", err }) })
 }
 
+module.exports.addclassstatus = (req, res) => {
+    var newClassStatus = new ClassStatus();
+    newClassStatus.id = Math.floor(Math.random() * 100) * Number(Date.now()),
+        newClassStatus.classStatusName = req.body.classStatusName,
+        newClassStatus.classStatusDesc = req.body.classStatusDesc,
+        newClassStatus.status = req.body.status
+    newClassStatus.save()
+        .then(result => { res.status('200').send({ message: "Country added successfully", status: 'ok', result }) })
+        .catch(err => { res.status('400').send({ message: "something went wrong !!", err }) })
+}
+
 const getStatus = (req, res) => {
     Status.find({})
         .then(result => { res.status('200').send({ message: "status retrieved successfully", result }) })
@@ -248,6 +260,14 @@ module.exports.getCorrespondingData = (req, res) => {
             .then(result => { res.status('200').send({ message: "status retrieved successfully", status: 'ok', result }) })
             .catch(err => { res.status('400').send({ message: "something went wrong !!", err }) })
     }
+
+    else if (req.params.name == 'ClassStatuses') {
+        ClassStatus.find({})
+            .select(' -_id -__v  ')
+            .then(result => { res.status('200').send({ message: "Classstatus retrieved successfully", status: 'ok', result }) })
+            .catch(err => { res.status('400').send({ message: "something went wrong !!", err }) })
+    }
+
 
 }
 
