@@ -12,7 +12,7 @@ const Customer = new mongoose.Schema({
   timeZoneId: String,
   numberOfStudents: Number,
   customerId: String,
-  country: String,
+  countryId: String,
   placeOfStay: String,
   classStatusId: String,
   proposedAmount: Number,

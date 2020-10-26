@@ -9,6 +9,8 @@ const Currency = require('../models/Currency.model');
 const Country = require('../models/Country.model');
 const Status = require('../models/Status.model')
 const ClassStatus = require('../models/ClassStatuses.model')
+const Teacher = require('../models/Teacher.model')
+const Agent = require('../models/Agent.model')
 
 module.exports = {
 
@@ -207,6 +209,28 @@ module.exports.addclassstatus = (req, res) => {
         .catch(err => { res.status('400').send({ message: "something went wrong !!", err }) })
 }
 
+module.exports.addTeacher = (req, res) => {
+    var addTeachernew = new Teacher();
+    addTeachernew.id = Math.floor(Math.random() * 100) * Number(Date.now()),
+        addTeachernew.TeacherName = req.body.TeacherName,
+        addTeachernew.TeacherDesc = req.body.TeacherDesc,
+        addTeachernew.TeacherStatus = req.body.TeacherStatus
+    addTeachernew.save()
+        .then(result => { res.status('200').send({ message: "Teacher added successfully", status: 'ok', result }) })
+        .catch(err => { res.status('400').send({ message: "something went wrong !!", err }) })
+}
+
+module.exports.addAgent = (req, res) => {
+    var addAgentnew = new Agent();
+    addAgentnew.id = Math.floor(Math.random() * 100) * Number(Date.now()),
+        addAgentnew.AgentName = req.body.AgentName,
+        addAgentnew.AgentDesc = req.body.AgentDesc,
+        addAgentnew.AgentStatus = req.body.AgentStatus
+    addAgentnew.save()
+        .then(result => { res.status('200').send({ message: "Agent added successfully", status: 'ok', result }) })
+        .catch(err => { res.status('400').send({ message: "something went wrong !!", err }) })
+}
+
 const getStatus = (req, res) => {
     Status.find({})
         .then(result => { res.status('200').send({ message: "status retrieved successfully", result }) })
@@ -253,6 +277,18 @@ module.exports.getCorrespondingData = (req, res) => {
         ClassStatus.find({})
             .select(' -_id -__v  ')
             .then(result => { res.status('200').send({ message: "Classstatus retrieved successfully", status: 'ok', result }) })
+            .catch(err => { res.status('400').send({ message: "something went wrong !!", err }) })
+    }
+    else if (req.params.name == 'Teachers') {
+        Teacher.find({})
+            .select(' -_id -__v  ')
+            .then(result => { res.status('200').send({ message: "Teacher retrieved successfully", status: 'ok', result }) })
+            .catch(err => { res.status('400').send({ message: "something went wrong !!", err }) })
+    }
+    else if (req.params.name == 'Agents') {
+        Agent.find({})
+            .select(' -_id -__v  ')
+            .then(result => { res.status('200').send({ message: "Agents retrieved successfully", status: 'ok', result }) })
             .catch(err => { res.status('400').send({ message: "something went wrong !!", err }) })
     }
 
